@@ -352,7 +352,7 @@ function Load_ItemData(ProbNo){
 function Load_ItemsList(){
 	let Prob=[],text='',ItemsListData=[];
 	text='Algorithms<hr>';
-	Prob[0]={algo:"Bisection Method",f:"x^2-2",x1:1,x2:2,iterations:10,heading:"Roots of Equations"};
+	Prob[0]={algo:"Bisection Method",f:"x^2-2",x1:1,x2:2,iterations:10,heading:"Roots of Equations<br>"};
 	Prob[1]={algo:"Newton Raphson Method",f:"x^2-2",fdash:"2*x", x1:1,iterations:5};
 	for(let i=0;i<Prob.length;i++){
 		if(Prob[i].heading!=null){text += Prob[i].heading;}
