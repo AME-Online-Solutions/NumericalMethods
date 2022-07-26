@@ -377,9 +377,9 @@ function Process_Data(){
 	let O=JSON.parse(gidh("ItemData"));
 	var fnname=O.algo.replace(/[()-.'\/ \&]/g,"_");
 	var output= eval(fnname+"(O)");
-	let fnstr=window[fnname].toString().replace(/</g,"&#60;").replace(/\{ /g,"{<br>").replace(/\; /g,";<br>");
+	let fnstr=window[fnname].toString();  //.replace(/</g,"&#60;").replace(/\{ /g,"{<br>").replace(/\; /g,";<br>");
 	console.log(fnstr);
-	var fnstrp = fnstr.substring(fnstr.lastIndexOf("//**//") + 6, fnstr.lastIndexOf("//***//"));
+	var fnstrp = fnstr;  //.substring(fnstr.lastIndexOf("//**//") + 6, fnstr.lastIndexOf("//***//"));
 	output+="<br>"+"<div align=left>"+fnstrp+"</div>";
 	sidh("output",output);
 }
