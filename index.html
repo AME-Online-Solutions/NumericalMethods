@@ -351,10 +351,12 @@ function Load_ItemData(ProbNo){
 }
 function Load_ItemsList(){
 	let Prob=[],text='',ItemsListData=[];
-	text='Algorithms<br>';
-	Prob[0]={algo:"DDA Line",x1:0,y1:0,x2:5,y2:2};
+	text='Algorithms<hr>';
+	Prob[0]={algo:"Bisection Method",f:"x^2-2",x1:1,x2:2,iterations:10,heading:"Roots of Equations"};
+	Prob[1]={algo:"Newton Raphson Method",f:"x^2-2",fdash:"2*x", x1:1,iterations:5};
 	for(let i=0;i<Prob.length;i++){
-		text +='<button name="Item" value="'+i+'" class="button" >'+Prob[i].algo+'</button><br>';
+		if(Prob[i].heading!=null){text += Prob[i].heading;}
+        text +='<button name="Item" value="'+i+'" class="button" >'+Prob[i].algo+'</button><br>';
 		ItemsListData.push(Prob[i])
 	}
 	sidh("ItemsList",text);
