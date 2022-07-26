@@ -354,8 +354,8 @@ function Load_ItemData(ProbNo){
 function Load_ItemsList(){
 	let Prob=[],text='',ItemsListData=[];
 	text='Algorithms<hr>';
-	Prob[0]={algo:"Bisection Method",f:"x^2-2",x1:1,x2:2,iterations:10,heading:"Roots of Equations<br>"};
-	Prob[1]={algo:"Newton Raphson Method",f:"x^2-2",fdash:"2*x", x1:1,iterations:5};
+	Prob[0]={algo:"Bisection Method",fstr:"x^2-2",x1:1,x2:2,iterations:10,heading:"Roots of Equations<br>"};
+	Prob[1]={algo:"Newton Raphson Method",fstr:"x^2-2",fdashstr:"2*x", x1:1,iterations:5};
 	for(let i=0;i<Prob.length;i++){
 		if(Prob[i].heading!=null){text += Prob[i].heading;}
         text +='<button name="Item" value="'+i+'" class="button" >'+Prob[i].algo+'</button><br>';
@@ -374,14 +374,48 @@ function refreshAll(){
   Process_Data();
 }
 function Process_Data(){
-	let Item=JSON.parse(gidh("ItemData"));
-	var fnname=Item.algo.replace(/[()-.'\/ \&]/g,"_");
-	var output= eval(fnname+"_Algorithm(Item)");
-	let fnstr=window[fnname+"_Algorithm"].toString().replace(/</g,"&#60;").replace(/\{ /g,"{<br>").replace(/\; /g,";<br>");
+	let O=JSON.parse(gidh("ItemData"));
+	var fnname=O.algo.replace(/[()-.'\/ \&]/g,"_");
+	var output= eval(fnname+"(O)");
+	let fnstr=window[fnname].toString().replace(/</g,"&#60;").replace(/\{ /g,"{<br>").replace(/\; /g,";<br>");
 	console.log(fnstr);
 	var fnstrp = fnstr.substring(fnstr.lastIndexOf("//**//") + 6, fnstr.lastIndexOf("//***//"));
 	output+="<br>"+"<div align=left>"+fnstrp+"</div>";
 	sidh("output",output);
+}
+function process_f(f){
+	return f.replace(/\^/g,"**");
+}
+function Bisection_Method(O){
+	let text="";
+	//**//
+	//O={algo:"Bisection Method",f:"x^2-2",x1:1,x2:2,iterations:10,heading:"Roots of Equations<br>"}; 
+	let Data=[["IterNo","x1","x2","x3=(x1+x2)/2","f(x1)","f(x2)","f(x3)","f(x2)*f(x3)","Decision"]]; 
+	//text += JSON.stringify(O)+"<br>"; 
+	let x1=O.x1,x2=O.x2,fstr=O.fstr,iterations=O.iterations,x3; 
+	text += "<br> f(x1) = "+O.fstr.replace(/x/g,"x1"); 
+	text += "<br> f(x2) = "+O.fstr.replace(/x/g,"x2"); 
+	text += "<br> f(x3) = "+O.fstr.replace(/x/g,"x3"); 
+	fstr=process_f(fstr); 
+	const f = function (x) {return eval(fstr);} 
+	text += '<br>f(x1) = '+O.fstr.replace(/x/g,"("+x1+")")+' = '+ f(x1); 
+	text += '<br>f(x2) = '+O.fstr.replace(/x/g,"("+x2+")")+' = '+ f(x2); 
+	if(f(x1)*f(x2)>0){text += "<br>As f(x1)*f(x2)>0, initial guess is wrong. change either x1 or x2"; return text;}; 
+	text += "<br>Since f(x1)*f(x2)<0, initial guess of x1 and x2 is correct.<br>"; 
+	for(let i=0;i<iterations;i++){ 
+		x3=(x1+x2)/2; 
+		let Decision ="f(x2)*f(x3)>0, x2=x3";if(f(x2)*f(x3)<=0){Decision = "f(x2)*f(x3)<=0, x1=x3";}; 
+		Data.push([i+1,x1,x2,x3,f(x1),f(x2),f(x3),f(x2)*f(x3),Decision]); 
+		if(f(x2)*f(x3)>0){ 
+			x2=x3; 
+		}else{ 
+			x1=x3; 
+		}; 
+	}; 
+	text += SimpleD2T(Data,"Data"); 
+	text += "<br>The root of y=f(x)="+O.fstr+" after "+iterations+" iterations, is "+x3+"<br><br>"; 
+	return text; 
+	//***//
 }
 function DDA_Line_Algorithm(Item){ 
 	let text="";
